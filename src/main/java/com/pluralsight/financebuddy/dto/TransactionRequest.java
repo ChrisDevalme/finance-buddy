@@ -17,4 +17,6 @@ public class TransactionRequest {
     private LocalDate transactionDate;
     @Getter
     private Long accountId;
+    @Getter
+    private Long categoryId;
 }

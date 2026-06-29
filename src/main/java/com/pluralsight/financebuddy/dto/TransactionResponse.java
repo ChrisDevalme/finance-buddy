@@ -19,13 +19,16 @@ public class TransactionResponse {
     private LocalDate transactionDate;
     @Getter
     private Long accountId;
+    @Getter
+    private Long categoryId;
 
-    public TransactionResponse(Long id, String description, BigDecimal amount, TransactionType type, LocalDate transactionDate, Long accountId) {
+    public TransactionResponse(Long id, String description, BigDecimal amount, TransactionType type, LocalDate transactionDate, Long accountId, Long categoryId) {
         this.id = id;
         this.description = description;
         this.amount = amount;
         this.type = type;
         this.transactionDate = transactionDate;
         this.accountId = accountId;
+        this.categoryId = categoryId;
     }
 }
