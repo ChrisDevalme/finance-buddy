@@ -1,7 +1,12 @@
 package com.pluralsight.financebuddy.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.math.BigDecimal;
 
+@Getter
+@AllArgsConstructor
 public class DashboardResponse {
 
     private BigDecimal totalBalance;
@@ -9,16 +14,4 @@ public class DashboardResponse {
     private BigDecimal totalExpenses;
     private BigDecimal netCashFlow;
 
-    public DashboardResponse(BigDecimal totalBalance, BigDecimal totalIncome,
-                             BigDecimal totalExpenses, BigDecimal netCashFlow) {
-        this.totalBalance = totalBalance;
-        this.totalIncome = totalIncome;
-        this.totalExpenses = totalExpenses;
-        this.netCashFlow = netCashFlow;
-    }
-
-    public BigDecimal getTotalBalance() { return totalBalance; }
-    public BigDecimal getTotalIncome() { return totalIncome; }
-    public BigDecimal getTotalExpenses() { return totalExpenses; }
-    public BigDecimal getNetCashFlow() { return netCashFlow; }
 }

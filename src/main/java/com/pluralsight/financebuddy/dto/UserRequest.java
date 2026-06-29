@@ -2,7 +2,9 @@ package com.pluralsight.financebuddy.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 
+@Getter
 public class UserRequest {
 
     @NotBlank(message = "First name is required")
@@ -15,15 +17,4 @@ public class UserRequest {
     @NotBlank(message = "Email is required")
     private String email;
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
 }
