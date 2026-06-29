@@ -2,6 +2,7 @@ package com.pluralsight.financebuddy.controllers;
 
 import com.pluralsight.financebuddy.dto.BudgetRequest;
 import com.pluralsight.financebuddy.dto.BudgetResponse;
+import com.pluralsight.financebuddy.dto.BudgetSummaryResponse;
 import com.pluralsight.financebuddy.services.BudgetService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,5 +26,10 @@ public class BudgetController {
     @GetMapping("/user/{userId}")
     public List<BudgetResponse> getBudgetsByUser(@PathVariable Long userId) {
         return budgetService.getBudgetsByUserId(userId);
+    }
+
+    @GetMapping("/user/{userId}/summary")
+    public List<BudgetSummaryResponse> getBudgetSummaryByUser(@PathVariable Long userId) {
+        return budgetService.getBudgetSummaryByUserId(userId);
     }
 }

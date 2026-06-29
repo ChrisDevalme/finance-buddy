@@ -54,6 +54,13 @@ public class TransactionService {
         return mapToResponse(savedTransaction);
     }
 
+    public List<TransactionResponse> getTransactionsByUserId(Long userId) {
+        return transactionRepository.findByAccountUserId(userId)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
     public List<TransactionResponse> getTransactionsByAccountId(Long accountId) {
         return transactionRepository.findByAccountId(accountId)
                 .stream()
@@ -61,7 +68,19 @@ public class TransactionService {
                 .toList();
     }
 
+    public List<TransactionResponse> getTransactionsByUserIdAndCategoryId(Long userId, Long categoryId) {
+        return transactionRepository.findByAccountUserIdAndCategoryId(userId, categoryId)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
     private TransactionResponse mapToResponse(Transaction transaction) {
+        Long categoryId = null;
+
+        if (transaction.getCategory() != null) {
+            categoryId = transaction.getCategory().getId();
+        }
         return new TransactionResponse(
                 transaction.getId(),
                 transaction.getDescription(),
@@ -69,7 +88,7 @@ public class TransactionService {
                 transaction.getType(),
                 transaction.getTransactionDate(),
                 transaction.getAccount().getId(),
-                transaction.getCategory().getId()
+                categoryId
         );
     }
 }
