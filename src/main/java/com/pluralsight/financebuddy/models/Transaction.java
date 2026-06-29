@@ -10,38 +10,31 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "transactions")
+@Getter
+@Setter
 public class Transaction {
 
-    @Getter
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
-    @Setter
     private String description;
 
-    @Getter
-    @Setter
     private BigDecimal amount;
 
-    @Getter
-    @Setter
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    @Getter
-    @Setter
     private LocalDate transactionDate;
 
-    @Getter
-    @Setter
+    @Column(length = 1000)
+    private String notes;
+
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @Getter
-    @Setter
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
