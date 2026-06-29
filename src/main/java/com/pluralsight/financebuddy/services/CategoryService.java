@@ -40,6 +40,30 @@ public class CategoryService {
                 .toList();
     }
 
+    public void createDefaultCategoriesForUser(User user) {
+        List<String> defaultCategories = List.of(
+                "Food",
+                "Rent",
+                "Gas",
+                "Shopping",
+                "Entertainment",
+                "Subscriptions",
+                "Income",
+                "Savings",
+                "Health",
+                "Transportation"
+        );
+
+        List<Category> categories = defaultCategories.stream()
+                .map(name -> Category.builder()
+                        .name(name)
+                        .user(user)
+                        .build())
+                .toList();
+
+        categoryRepository.saveAll(categories);
+    }
+
     private CategoryResponse mapToResponse(Category category) {
         return new CategoryResponse(
                 category.getId(),

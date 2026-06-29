@@ -13,9 +13,12 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CategoryService categoryService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, CategoryService categoryService) {
+
         this.userRepository = userRepository;
+        this.categoryService = categoryService;
     }
 
     public UserResponse createUser(UserRequest request) {
@@ -26,6 +29,7 @@ public class UserService {
         user.setEmail(request.getEmail());
 
         User savedUser = userRepository.save(user);
+        categoryService.createDefaultCategoriesForUser(savedUser);
 
         return mapToUserResponse(savedUser);
     }

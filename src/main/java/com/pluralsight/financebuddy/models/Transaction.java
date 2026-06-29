@@ -2,8 +2,7 @@ package com.pluralsight.financebuddy.models;
 
 import com.pluralsight.financebuddy.enums.TransactionType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,6 +11,9 @@ import java.time.LocalDate;
 @Table(name = "transactions")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Transaction {
 
 
