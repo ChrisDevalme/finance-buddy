@@ -3,6 +3,7 @@ package com.pluralsight.financebuddy.controllers;
 import com.pluralsight.financebuddy.dto.CategorySpendingResponse;
 import com.pluralsight.financebuddy.dto.DashboardResponse;
 import com.pluralsight.financebuddy.dto.MonthlySummaryResponse;
+import com.pluralsight.financebuddy.services.CurrentUserService;
 import com.pluralsight.financebuddy.services.DashboardService;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +14,18 @@ import java.util.List;
 public class DashboardController {
 
     private final DashboardService dashboardService;
+    private final CurrentUserService currentUserService;
 
-    public DashboardController(DashboardService dashboardService) {
+
+    public DashboardController(DashboardService dashboardService, CurrentUserService currentUserService) {
         this.dashboardService = dashboardService;
+        this.currentUserService = currentUserService;
+    }
+
+    @GetMapping("/me")
+    public DashboardResponse getMyDashboard() {
+        Long userId = currentUserService.getCurrentUser().getId();
+        return dashboardService.getDashboardByUserId(userId);
     }
 
     @GetMapping("/user/{userId}")

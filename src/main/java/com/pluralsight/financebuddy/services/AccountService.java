@@ -21,26 +21,24 @@ public class AccountService {
         this.userRepository = userRepository;
     }
 
-    public AccountResponse createAccount(AccountRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Account account = new Account();
-        account.setName(request.getName());
-        account.setType(request.getType());
-        account.setBalance(request.getBalance());
-        account.setUser(user);
-
-        Account savedAccount = accountRepository.save(account);
-
-        return mapToResponse(savedAccount);
-    }
-
     public List<AccountResponse> getAccountsByUserId(Long userId) {
         return accountRepository.findByUserId(userId)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+    public AccountResponse createAccount(AccountRequest request, User user) {
+        Account account = Account.builder()
+                .name(request.getName())
+                .type(request.getType())
+                .balance(request.getBalance())
+                .user(user)
+                .build();
+
+        Account savedAccount = accountRepository.save(account);
+
+        return mapToResponse(savedAccount);
     }
 
     private AccountResponse mapToResponse(Account account) {

@@ -20,17 +20,13 @@ public class CategoryService {
         this.userRepository = userRepository;
     }
 
-    public CategoryResponse createCategory(CategoryRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public CategoryResponse createCategory(CategoryRequest request, User user) {
+        Category category = Category.builder()
+                .name(request.getName())
+                .user(user)
+                .build();
 
-        Category category = new Category();
-        category.setName(request.getName());
-        category.setUser(user);
-
-        Category savedCategory = categoryRepository.save(category);
-
-        return mapToResponse(savedCategory);
+        return mapToResponse(categoryRepository.save(category));
     }
 
     public List<CategoryResponse> getCategoriesByUserId(Long userId) {

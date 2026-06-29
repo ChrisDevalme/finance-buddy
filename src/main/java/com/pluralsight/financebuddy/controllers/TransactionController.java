@@ -4,6 +4,7 @@ import com.pluralsight.financebuddy.dto.ApiResponse;
 import com.pluralsight.financebuddy.dto.TransactionRequest;
 import com.pluralsight.financebuddy.dto.TransactionResponse;
 import com.pluralsight.financebuddy.enums.TransactionType;
+import com.pluralsight.financebuddy.services.CurrentUserService;
 import com.pluralsight.financebuddy.services.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +16,22 @@ import java.util.List;
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final CurrentUserService currentUserService;
 
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService, CurrentUserService currentUserService) {
         this.transactionService = transactionService;
+        this.currentUserService = currentUserService;
     }
 
     @PostMapping
     public TransactionResponse createTransaction(@Valid @RequestBody TransactionRequest request) {
         return transactionService.createTransaction(request);
+    }
+
+    @GetMapping("/me")
+    public List<TransactionResponse> getMyTransactions() {
+        Long userId = currentUserService.getCurrentUser().getId();
+        return transactionService.getTransactionsByUserId(userId);
     }
 
     @GetMapping("/{transactionId}")

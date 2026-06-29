@@ -3,9 +3,11 @@ package com.pluralsight.financebuddy.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class UserRequest {
+@Setter
+public class RegisterRequest {
 
     @NotBlank(message = "First name is required")
     private String firstName;
@@ -19,5 +21,4 @@ public class UserRequest {
 
     @NotBlank(message = "Password is required")
     private String password;
-
 }

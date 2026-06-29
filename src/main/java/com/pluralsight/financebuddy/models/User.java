@@ -21,7 +21,9 @@ public class User {
     private String lastName;
     @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
 }
