@@ -5,23 +5,18 @@ import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "categories")
 public class Category {
 
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Getter
-    @Setter
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Getter
-    @Setter
     private String name;
 
 }
