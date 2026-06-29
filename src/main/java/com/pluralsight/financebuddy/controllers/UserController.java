@@ -3,6 +3,7 @@ package com.pluralsight.financebuddy.controllers;
 import com.pluralsight.financebuddy.dto.UserRequest;
 import com.pluralsight.financebuddy.dto.UserResponse;
 import com.pluralsight.financebuddy.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse createUser(@RequestBody UserRequest request) {
+    public UserResponse createUser(@Valid @RequestBody UserRequest request) {
         return userService.createUser(request);
     }
 
@@ -30,5 +31,15 @@ public class UserController {
     @GetMapping("/{id}")
     public UserResponse getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
+    }
+
+    @PutMapping("/{id}")
+    public UserResponse updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+        return userService.updateUser(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
     }
 }

@@ -2,6 +2,7 @@ package com.pluralsight.financebuddy.services;
 
 import com.pluralsight.financebuddy.dto.UserRequest;
 import com.pluralsight.financebuddy.dto.UserResponse;
+import com.pluralsight.financebuddy.exceptions.ResourceNotFoundException;
 import com.pluralsight.financebuddy.models.User;
 import com.pluralsight.financebuddy.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,26 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return mapToUserResponse(user);
+    }
+
+    public UserResponse updateUser(Long id, UserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+
+        User updatedUser = userRepository.save(user);
+
+        return mapToUserResponse(updatedUser);
+    }
+
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        userRepository.delete(user);
     }
 
     private UserResponse mapToUserResponse(User user) {
