@@ -1,5 +1,6 @@
 package com.pluralsight.financebuddy.dto;
 
+import com.pluralsight.financebuddy.enums.TransactionType;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -13,13 +14,13 @@ public class TransactionResponse {
     @Getter
     private BigDecimal amount;
     @Getter
-    private String type;
+    private TransactionType type;
     @Getter
     private LocalDate transactionDate;
     @Getter
     private Long accountId;
 
-    public TransactionResponse(Long id, String description, BigDecimal amount, String type, LocalDate transactionDate, Long accountId) {
+    public TransactionResponse(Long id, String description, BigDecimal amount, TransactionType type, LocalDate transactionDate, Long accountId) {
         this.id = id;
         this.description = description;
         this.amount = amount;

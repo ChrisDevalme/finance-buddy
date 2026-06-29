@@ -2,6 +2,7 @@ package com.pluralsight.financebuddy.services;
 
 import com.pluralsight.financebuddy.dto.TransactionRequest;
 import com.pluralsight.financebuddy.dto.TransactionResponse;
+import com.pluralsight.financebuddy.enums.TransactionType;
 import com.pluralsight.financebuddy.models.Account;
 import com.pluralsight.financebuddy.models.Transaction;
 import com.pluralsight.financebuddy.repositories.AccountRepository;
@@ -32,6 +33,14 @@ public class TransactionService {
         transaction.setTransactionDate(request.getTransactionDate());
         transaction.setAccount(account);
 
+        if (transaction.getType() == TransactionType.EXPENSE) {
+            account.setBalance(account.getBalance().subtract(transaction.getAmount()));
+        }
+        else if (transaction.getType() == TransactionType.INCOME) {
+            account.setBalance(account.getBalance().add(transaction.getAmount()));
+        }
+
+        accountRepository.save(account);
         Transaction savedTransaction = transactionRepository.save(transaction);
 
         return mapToResponse(savedTransaction);

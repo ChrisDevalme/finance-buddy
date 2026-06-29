@@ -1,5 +1,6 @@
 package com.pluralsight.financebuddy.models;
 
+import com.pluralsight.financebuddy.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,8 @@ public class Transaction {
 
     @Getter
     @Setter
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
 
     @Getter
     @Setter
