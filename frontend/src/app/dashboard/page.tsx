@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import dashboardService from "@/services/dashboardService";
-import DashboardCard from "@/components/DashboardCard";
+import DashboardGrid from "@/components/dashboard/DashboardGrid";
 import { DashboardSummary } from "@/types";
-import Navbar from "@/components/Navbar";
+import AppLayout from "@/components/layout/AppLayout";
+import Navbar from "@/components/layout/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function DashboardPage() {
@@ -45,18 +46,8 @@ export default function DashboardPage() {
     }
 
     return (
-        <ProtectedRoute>
-            <Navbar />
-        <main className="min-h-screen bg-gray-100 p-8">
-            <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <DashboardCard label="Total Balance" value={summary?.totalBalance ?? 0} />
-                <DashboardCard label="Income" value={summary?.totalIncome ?? 0} />
-                <DashboardCard label="Expenses" value={summary?.totalExpenses ?? 0} />
-                <DashboardCard label="Net Cash Flow" value={summary?.netCashFlow ?? 0} />
-            </div>
-        </main>
-        </ProtectedRoute>
+        <AppLayout title="Dashboard">
+            {summary && <DashboardGrid summary={summary} />}
+        </AppLayout>
     );
 }
