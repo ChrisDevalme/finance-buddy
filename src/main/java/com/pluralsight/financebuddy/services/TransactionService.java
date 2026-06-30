@@ -7,6 +7,7 @@ import com.pluralsight.financebuddy.enums.TransactionType;
 import com.pluralsight.financebuddy.models.Account;
 import com.pluralsight.financebuddy.models.Category;
 import com.pluralsight.financebuddy.models.Transaction;
+import com.pluralsight.financebuddy.models.User;
 import com.pluralsight.financebuddy.repositories.AccountRepository;
 import com.pluralsight.financebuddy.repositories.CategoryRepository;
 import com.pluralsight.financebuddy.repositories.TransactionRepository;
@@ -30,12 +31,20 @@ public class TransactionService {
     }
 
     @Transactional
-    public TransactionResponse createTransaction(TransactionRequest request) {
+    public TransactionResponse createTransaction(TransactionRequest request, User user) {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
+        if (!account.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this account");
+        }
+
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        if (!category.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this category");
+        }
 
         Transaction transaction = new Transaction();
         transaction.setDescription(request.getDescription());
@@ -67,9 +76,13 @@ public class TransactionService {
     }
 
     @Transactional
-    public TransactionResponse updateTransaction(Long transactionId, TransactionRequest request) {
+    public TransactionResponse updateTransaction(Long transactionId, TransactionRequest request, User user) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        if (!transaction.getAccount().getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this transaction");
+        }
 
         Account oldAccount = transaction.getAccount();
 
@@ -83,8 +96,16 @@ public class TransactionService {
         Account newAccount = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
+        if (!newAccount.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this account");
+        }
+
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        if (!category.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this category");
+        }
 
         // Step 2: Update transaction fields
         transaction.setDescription(request.getDescription());
@@ -110,32 +131,26 @@ public class TransactionService {
     }
 
     @Transactional
-    public ApiResponse deleteTransaction(Long transactionId) {
-
+    public ApiResponse deleteTransaction(Long transactionId, User user) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
+        if (!transaction.getAccount().getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this transaction");
+        }
+
         Account account = transaction.getAccount();
 
-        // Reverse the original transaction
         if (transaction.getType() == TransactionType.EXPENSE) {
-            account.setBalance(
-                    account.getBalance().add(transaction.getAmount())
-            );
+            account.setBalance(account.getBalance().add(transaction.getAmount()));
         } else if (transaction.getType() == TransactionType.INCOME) {
-            account.setBalance(
-                    account.getBalance().subtract(transaction.getAmount())
-            );
+            account.setBalance(account.getBalance().subtract(transaction.getAmount()));
         }
 
         accountRepository.save(account);
-
         transactionRepository.delete(transaction);
 
-        return new ApiResponse(
-                true,
-                "Transaction deleted successfully."
-        );
+        return new ApiResponse(true, "Transaction deleted successfully.");
     }
 
     public List<TransactionResponse> getTransactionsByUserId(Long userId) {
@@ -145,7 +160,26 @@ public class TransactionService {
                 .toList();
     }
 
-    public List<TransactionResponse> getTransactionsByAccountId(Long accountId) {
+    public TransactionResponse getTransactionById(Long transactionId, User user) {
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        if (!transaction.getAccount().getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this transaction");
+        }
+
+        return mapToResponse(transaction);
+    }
+
+    public List<TransactionResponse> getTransactionsByAccountId(Long accountId, User user) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        if (!account.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this account");
+        }
+
         return transactionRepository.findByAccountId(accountId)
                 .stream()
                 .map(this::mapToResponse)

@@ -35,23 +35,23 @@ public class BudgetService {
         this.transactionRepository = transactionRepository;
     }
 
-    public BudgetResponse createBudget(BudgetRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+    public BudgetResponse createBudget(BudgetRequest request, User user) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        Budget budget = new Budget();
-        budget.setMonthlyLimit(request.getMonthlyLimit());
-        budget.setMonth(request.getMonth());
-        budget.setYear(request.getYear());
-        budget.setUser(user);
-        budget.setCategory(category);
+        if (!category.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this category");
+        }
 
-        Budget savedBudget = budgetRepository.save(budget);
+        Budget budget = Budget.builder()
+                .monthlyLimit(request.getMonthlyLimit())
+                .month(request.getMonth())
+                .year(request.getYear())
+                .user(user)
+                .category(category)
+                .build();
 
-        return mapToResponse(savedBudget);
+        return mapToResponse(budgetRepository.save(budget));
     }
 
     public List<BudgetResponse> getBudgetsByUserId(Long userId) {

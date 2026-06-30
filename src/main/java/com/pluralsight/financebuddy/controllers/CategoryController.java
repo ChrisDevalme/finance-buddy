@@ -34,8 +34,8 @@ public class CategoryController {
         return categoryService.getCategoriesByUserId(userId);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<CategoryResponse> getCategoriesByUser(@PathVariable Long userId) {
-        return categoryService.getCategoriesByUserId(userId);
-    }
+//    @GetMapping("/user/{userId}")
+//    public List<CategoryResponse> getCategoriesByUser(@PathVariable Long userId) {
+//        return categoryService.getCategoriesByUserId(userId);
+//    }
 }

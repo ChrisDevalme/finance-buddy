@@ -34,8 +34,8 @@ public class AccountController {
         return accountService.getAccountsByUserId(userId);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<AccountResponse> getAccountsByUser(@PathVariable Long userId) {
-        return accountService.getAccountsByUserId(userId);
-    }
+//    @GetMapping("/user/{userId}")
+//    public List<AccountResponse> getAccountsByUser(@PathVariable Long userId) {
+//        return accountService.getAccountsByUserId(userId);
+//    }
 }

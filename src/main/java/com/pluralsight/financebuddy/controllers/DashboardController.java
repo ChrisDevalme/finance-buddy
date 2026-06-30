@@ -28,24 +28,42 @@ public class DashboardController {
         return dashboardService.getDashboardByUserId(userId);
     }
 
-    @GetMapping("/user/{userId}")
-    public DashboardResponse getDashboardByUser(@PathVariable Long userId) {
-        return dashboardService.getDashboardByUserId(userId);
-    }
+//    @GetMapping("/user/{userId}")
+//    public DashboardResponse getDashboardByUser(@PathVariable Long userId) {
+//        return dashboardService.getDashboardByUserId(userId);
+//    }
 
-    @GetMapping("/user/{userId}/spending-by-category")
-    public List<CategorySpendingResponse> getSpendingByCategory(
-            @PathVariable Long userId,
+    @GetMapping("/me/spending-by-category")
+    public List<CategorySpendingResponse> getMySpendingByCategory(
             @RequestParam int month,
             @RequestParam int year) {
+
+        Long userId = currentUserService.getCurrentUser().getId();
         return dashboardService.getSpendingByCategory(userId, month, year);
     }
 
-    @GetMapping("/user/{userId}/monthly-summary")
-    public MonthlySummaryResponse getMonthlySummary(
-            @PathVariable Long userId,
+//    @GetMapping("/user/{userId}/spending-by-category")
+//    public List<CategorySpendingResponse> getSpendingByCategory(
+//            @PathVariable Long userId,
+//            @RequestParam int month,
+//            @RequestParam int year) {
+//        return dashboardService.getSpendingByCategory(userId, month, year);
+//    }
+
+    @GetMapping("/me/monthly-summary")
+    public MonthlySummaryResponse getMyMonthlySummary(
             @RequestParam int month,
             @RequestParam int year) {
+
+        Long userId = currentUserService.getCurrentUser().getId();
         return dashboardService.getMonthlySummary(userId, month, year);
     }
+
+//    @GetMapping("/user/{userId}/monthly-summary")
+//    public MonthlySummaryResponse getMonthlySummary(
+//            @PathVariable Long userId,
+//            @RequestParam int month,
+//            @RequestParam int year) {
+//        return dashboardService.getMonthlySummary(userId, month, year);
+//    }
 }

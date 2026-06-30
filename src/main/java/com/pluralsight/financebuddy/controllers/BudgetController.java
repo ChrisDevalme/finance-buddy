@@ -3,8 +3,10 @@ package com.pluralsight.financebuddy.controllers;
 import com.pluralsight.financebuddy.dto.BudgetRequest;
 import com.pluralsight.financebuddy.dto.BudgetResponse;
 import com.pluralsight.financebuddy.dto.BudgetSummaryResponse;
+import com.pluralsight.financebuddy.models.User;
 import com.pluralsight.financebuddy.services.BudgetService;
 import com.pluralsight.financebuddy.services.CurrentUserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,9 @@ public class BudgetController {
     }
 
     @PostMapping
-    public BudgetResponse createBudget(@RequestBody BudgetRequest request) {
-        return budgetService.createBudget(request);
+    public BudgetResponse createBudget(@Valid @RequestBody BudgetRequest request) {
+        User user = currentUserService.getCurrentUser();
+        return budgetService.createBudget(request, user);
     }
 
     @GetMapping("/me")
@@ -32,13 +35,14 @@ public class BudgetController {
         return budgetService.getBudgetsByUserId(userId);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<BudgetResponse> getBudgetsByUser(@PathVariable Long userId) {
-        return budgetService.getBudgetsByUserId(userId);
-    }
-
-    @GetMapping("/user/{userId}/summary")
-    public List<BudgetSummaryResponse> getBudgetSummaryByUser(@PathVariable Long userId) {
+    @GetMapping("/me/summary")
+    public List<BudgetSummaryResponse> getMyBudgetSummary() {
+        Long userId = currentUserService.getCurrentUser().getId();
         return budgetService.getBudgetSummaryByUserId(userId);
     }
+
+//    @GetMapping("/user/{userId}/summary")
+//    public List<BudgetSummaryResponse> getBudgetSummaryByUser(@PathVariable Long userId) {
+//        return budgetService.getBudgetSummaryByUserId(userId);
+//    }
 }
