@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { WalletCards } from "lucide-react";
@@ -42,12 +43,8 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                        <h1 className="text-2xl font-bold text-slate-900">
-                            Finance Buddy
-                        </h1>
-                        <p className="text-sm text-slate-500">
-                            Create your account
-                        </p>
+                        <h1 className="text-2xl font-bold text-slate-900">Finance Buddy</h1>
+                        <p className="text-sm text-slate-500">Create your account</p>
                     </div>
                 </div>
 
@@ -95,6 +92,13 @@ export default function RegisterPage() {
                         Create Account
                     </button>
                 </form>
+
+                <p className="text-sm text-slate-500 text-center mt-6">
+                    Already have an account?{" "}
+                    <Link href="/login" className="font-semibold text-slate-950">
+                        Sign in
+                    </Link>
+                </p>
             </section>
         </main>
     );
