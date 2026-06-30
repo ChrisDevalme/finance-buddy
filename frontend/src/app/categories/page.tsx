@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import categoryService from "@/services/categoryService";
 import { Category } from "@/types";
+import Navbar from "@/components/Navbar";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function CategoriesPage() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -27,6 +29,8 @@ export default function CategoriesPage() {
     }
 
     return (
+        <ProtectedRoute>
+        <Navbar />
         <main className="min-h-screen bg-gray-100 p-8">
             <h1 className="text-3xl font-bold mb-6">Categories</h1>
 
@@ -56,5 +60,6 @@ export default function CategoriesPage() {
                 ))}
             </div>
         </main>
+        </ProtectedRoute>
     );
 }

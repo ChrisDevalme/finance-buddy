@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import dashboardService from "@/services/dashboardService";
 import DashboardCard from "@/components/DashboardCard";
 import { DashboardSummary } from "@/types";
+import Navbar from "@/components/Navbar";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function DashboardPage() {
     const [summary, setSummary] = useState<DashboardSummary | null>(null);
@@ -43,6 +45,8 @@ export default function DashboardPage() {
     }
 
     return (
+        <ProtectedRoute>
+            <Navbar />
         <main className="min-h-screen bg-gray-100 p-8">
             <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
@@ -53,5 +57,6 @@ export default function DashboardPage() {
                 <DashboardCard label="Net Cash Flow" value={summary?.netCashFlow ?? 0} />
             </div>
         </main>
+        </ProtectedRoute>
     );
 }

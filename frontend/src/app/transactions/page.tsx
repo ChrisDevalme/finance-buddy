@@ -5,6 +5,8 @@ import transactionService from "@/services/transactionService";
 import accountService from "@/services/accountService";
 import categoryService from "@/services/categoryService";
 import { Account, Category, Transaction } from "@/types";
+import Navbar from "@/components/Navbar";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -57,6 +59,8 @@ export default function TransactionsPage() {
     }
 
     return (
+        <ProtectedRoute>
+            <Navbar />
         <main className="min-h-screen bg-gray-100 p-8">
             <h1 className="text-3xl font-bold mb-6">Transactions</h1>
 
@@ -149,5 +153,6 @@ export default function TransactionsPage() {
                 ))}
             </div>
         </main>
+        </ProtectedRoute>
     );
 }

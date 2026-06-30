@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import accountService from "@/services/accountService";
 import { Account } from "@/types";
+import Navbar from "@/components/Navbar";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function AccountsPage() {
     const [accounts, setAccounts] = useState<Account[]>([]);
@@ -42,7 +44,10 @@ export default function AccountsPage() {
     }
 
     return (
+        <ProtectedRoute>
+        <Navbar />
         <main className="min-h-screen bg-gray-100 p-8">
+
             <h1 className="text-3xl font-bold mb-6">Accounts</h1>
             <form
                 onSubmit={handleCreateAccount}
@@ -92,5 +97,6 @@ export default function AccountsPage() {
                 ))}
             </div>
         </main>
+        </ProtectedRoute>
     );
 }

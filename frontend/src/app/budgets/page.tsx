@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import budgetService from "@/services/budgetService";
 import categoryService from "@/services/categoryService";
 import { Budget, BudgetSummary, Category } from "@/types";
+import Navbar from "@/components/Navbar";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function BudgetsPage() {
     const [budgets, setBudgets] = useState<Budget[]>([]);
@@ -51,7 +53,10 @@ export default function BudgetsPage() {
     }
 
     return (
+        <ProtectedRoute>
+            <Navbar />
         <main className="min-h-screen bg-gray-100 p-8">
+
             <h1 className="text-3xl font-bold mb-6">Budgets</h1>
 
             <form
@@ -113,5 +118,6 @@ export default function BudgetsPage() {
                 ))}
             </div>
         </main>
+        </ProtectedRoute>
     );
 }
