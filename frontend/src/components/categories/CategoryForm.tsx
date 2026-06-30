@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Category } from "@/types";
-import categoryService from "@/services/categoryService";
+import { Category, CategoryRequest } from "@/types";
 
 interface CategoryFormProps {
-    onCategoryCreated: (category: Category) => void;
+    onCategoryCreated: (category: CategoryRequest) => Promise<Category>;
 }
 
 export default function CategoryForm({ onCategoryCreated }: CategoryFormProps) {
@@ -14,9 +13,8 @@ export default function CategoryForm({ onCategoryCreated }: CategoryFormProps) {
     async function handleCreateCategory(e: React.FormEvent) {
         e.preventDefault();
 
-        const newCategory = await categoryService.createCategory({ name });
+        await onCategoryCreated({ name });
 
-        onCategoryCreated(newCategory);
         setName("");
     }
 

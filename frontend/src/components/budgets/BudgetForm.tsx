@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Budget, Category } from "@/types";
-import budgetService from "@/services/budgetService";
+import { Budget, BudgetRequest, Category } from "@/types";
 
 interface BudgetFormProps {
     categories: Category[];
-    onBudgetCreated: (budget: Budget) => void;
+    onBudgetCreated: (budget: BudgetRequest) => Promise<Budget>;
 }
 
 export default function BudgetForm({ categories, onBudgetCreated }: BudgetFormProps) {
@@ -18,14 +17,12 @@ export default function BudgetForm({ categories, onBudgetCreated }: BudgetFormPr
     async function handleCreateBudget(e: React.FormEvent) {
         e.preventDefault();
 
-        const newBudget = await budgetService.createBudget({
+        await onBudgetCreated({
             monthlyLimit: Number(monthlyLimit),
             month: Number(month),
             year: Number(year),
             categoryId: Number(categoryId),
         });
-
-        onBudgetCreated(newBudget);
 
         setMonthlyLimit("");
         setCategoryId("");
@@ -75,7 +72,7 @@ export default function BudgetForm({ categories, onBudgetCreated }: BudgetFormPr
                 ))}
             </select>
 
-            <button className="bg-black text-white p-3 rounded">
+            <button type="submit" className="bg-black text-white p-3 rounded">
                 Create Budget
             </button>
         </form>

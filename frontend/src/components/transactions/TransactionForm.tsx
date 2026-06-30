@@ -1,13 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Account, Category, Transaction } from "@/types";
-import transactionService from "@/services/transactionService";
+import {
+    Account,
+    Category,
+    Transaction,
+    TransactionRequest,
+} from "@/types";
 
 interface TransactionFormProps {
     accounts: Account[];
     categories: Category[];
-    onTransactionCreated: (transaction: Transaction) => void;
+    onTransactionCreated: (
+        transaction: TransactionRequest
+    ) => Promise<Transaction>;
 }
 
 export default function TransactionForm({
@@ -17,7 +23,9 @@ export default function TransactionForm({
                                         }: TransactionFormProps) {
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
-    const [type, setType] = useState<"INCOME" | "EXPENSE" | "TRANSFER">("EXPENSE");
+    const [type, setType] = useState<"INCOME" | "EXPENSE" | "TRANSFER">(
+        "EXPENSE"
+    );
     const [transactionDate, setTransactionDate] = useState("");
     const [accountId, setAccountId] = useState("");
     const [categoryId, setCategoryId] = useState("");
@@ -25,7 +33,7 @@ export default function TransactionForm({
     async function handleCreateTransaction(e: React.FormEvent) {
         e.preventDefault();
 
-        const newTransaction = await transactionService.createTransaction({
+        await onTransactionCreated({
             description,
             amount: Number(amount),
             type,
@@ -33,8 +41,6 @@ export default function TransactionForm({
             accountId: Number(accountId),
             categoryId: Number(categoryId),
         });
-
-        onTransactionCreated(newTransaction);
 
         setDescription("");
         setAmount("");
@@ -90,7 +96,8 @@ export default function TransactionForm({
                 value={accountId}
                 onChange={(e) => setAccountId(e.target.value)}
             >
-                <option value="">Select account</option>
+                <option value="">Select Account</option>
+
                 {accounts.map((account) => (
                     <option key={account.id} value={account.id}>
                         {account.name}
@@ -103,7 +110,8 @@ export default function TransactionForm({
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
             >
-                <option value="">Select category</option>
+                <option value="">Select Category</option>
+
                 {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                         {category.name}
@@ -111,7 +119,10 @@ export default function TransactionForm({
                 ))}
             </select>
 
-            <button className="bg-black text-white p-3 rounded">
+            <button
+                type="submit"
+                className="bg-black text-white p-3 rounded hover:bg-gray-800 transition"
+            >
                 Create Transaction
             </button>
         </form>

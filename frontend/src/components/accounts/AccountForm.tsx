@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { Account } from "@/types";
-import accountService from "@/services/accountService";
+import {AccountRequest} from "@/types";
 
 interface AccountFormProps {
-    onAccountCreated: (account: Account) => void;
+    onAccountCreated: (account: AccountRequest) => Promise<Account>;
 }
 
 export default function AccountForm({ onAccountCreated }: AccountFormProps) {
@@ -16,13 +16,11 @@ export default function AccountForm({ onAccountCreated }: AccountFormProps) {
     async function handleCreateAccount(e: React.FormEvent) {
         e.preventDefault();
 
-        const newAccount = await accountService.createAccount({
+        await onAccountCreated({
             name,
             type,
             balance: Number(balance),
         });
-
-        onAccountCreated(newAccount);
 
         setName("");
         setType("CHECKING");
