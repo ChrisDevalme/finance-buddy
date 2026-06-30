@@ -8,4 +8,5 @@ import java.util.List;
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
 
     List<Budget> findByUserId(Long userId);
+    boolean existsByCategoryId(Long categoryId);
 }

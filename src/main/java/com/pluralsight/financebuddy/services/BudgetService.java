@@ -1,5 +1,6 @@
 package com.pluralsight.financebuddy.services;
 
+import com.pluralsight.financebuddy.dto.ApiResponse;
 import com.pluralsight.financebuddy.dto.BudgetRequest;
 import com.pluralsight.financebuddy.dto.BudgetResponse;
 import com.pluralsight.financebuddy.dto.BudgetSummaryResponse;
@@ -61,6 +62,41 @@ public class BudgetService {
                 .toList();
     }
 
+    public BudgetResponse updateBudget(Long budgetId, BudgetRequest request, User user) {
+        Budget budget = budgetRepository.findById(budgetId)
+                .orElseThrow(() -> new RuntimeException("Budget not found"));
+
+        if (!budget.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this budget");
+        }
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        if (!category.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this category");
+        }
+
+        budget.setMonthlyLimit(request.getMonthlyLimit());
+        budget.setMonth(request.getMonth());
+        budget.setYear(request.getYear());
+        budget.setCategory(category);
+
+        return mapToResponse(budgetRepository.save(budget));
+    }
+
+    public ApiResponse deleteBudget(Long budgetId, User user) {
+        Budget budget = budgetRepository.findById(budgetId)
+                .orElseThrow(() -> new RuntimeException("Budget not found"));
+
+        if (!budget.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You do not have access to this budget");
+        }
+
+        budgetRepository.delete(budget);
+
+        return new ApiResponse(true, "Budget deleted successfully.");
+    }
     public List<BudgetSummaryResponse> getBudgetSummaryByUserId(Long userId) {
         List<Budget> budgets = budgetRepository.findByUserId(userId);
 

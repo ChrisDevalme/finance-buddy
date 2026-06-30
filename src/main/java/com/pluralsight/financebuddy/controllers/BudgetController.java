@@ -1,5 +1,6 @@
 package com.pluralsight.financebuddy.controllers;
 
+import com.pluralsight.financebuddy.dto.ApiResponse;
 import com.pluralsight.financebuddy.dto.BudgetRequest;
 import com.pluralsight.financebuddy.dto.BudgetResponse;
 import com.pluralsight.financebuddy.dto.BudgetSummaryResponse;
@@ -39,6 +40,21 @@ public class BudgetController {
     public List<BudgetSummaryResponse> getMyBudgetSummary() {
         Long userId = currentUserService.getCurrentUser().getId();
         return budgetService.getBudgetSummaryByUserId(userId);
+    }
+
+    @PutMapping("/{budgetId}")
+    public BudgetResponse updateBudget(
+            @PathVariable Long budgetId,
+            @Valid @RequestBody BudgetRequest request) {
+
+        User user = currentUserService.getCurrentUser();
+        return budgetService.updateBudget(budgetId, request, user);
+    }
+
+    @DeleteMapping("/{budgetId}")
+    public ApiResponse deleteBudget(@PathVariable Long budgetId) {
+        User user = currentUserService.getCurrentUser();
+        return budgetService.deleteBudget(budgetId, user);
     }
 
 //    @GetMapping("/user/{userId}/summary")

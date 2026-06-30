@@ -1,5 +1,6 @@
 package com.pluralsight.financebuddy.controllers;
 
+import com.pluralsight.financebuddy.dto.ApiResponse;
 import com.pluralsight.financebuddy.dto.CategoryRequest;
 import com.pluralsight.financebuddy.dto.CategoryResponse;
 import com.pluralsight.financebuddy.models.User;
@@ -32,6 +33,21 @@ public class CategoryController {
     public List<CategoryResponse> getMyCategories() {
         Long userId = currentUserService.getCurrentUser().getId();
         return categoryService.getCategoriesByUserId(userId);
+    }
+
+    @PutMapping("/{categoryId}")
+    public CategoryResponse updateCategory(
+            @PathVariable Long categoryId,
+            @Valid @RequestBody CategoryRequest request) {
+
+        User user = currentUserService.getCurrentUser();
+        return categoryService.updateCategory(categoryId, request, user);
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ApiResponse deleteCategory(@PathVariable Long categoryId) {
+        User user = currentUserService.getCurrentUser();
+        return categoryService.deleteCategory(categoryId, user);
     }
 
 //    @GetMapping("/user/{userId}")
