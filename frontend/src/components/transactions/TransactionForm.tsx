@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Account,
     Category,
@@ -11,36 +11,69 @@ import {
 interface TransactionFormProps {
     accounts: Account[];
     categories: Category[];
-    onTransactionCreated: (
+    editingTransaction: Transaction | null;
+    onTransactionCreated: (transaction: TransactionRequest) => Promise<Transaction>;
+    onTransactionUpdated: (
+        transactionId: number,
         transaction: TransactionRequest
     ) => Promise<Transaction>;
+    onCancelEdit: () => void;
 }
 
 export default function TransactionForm({
                                             accounts,
                                             categories,
+                                            editingTransaction,
                                             onTransactionCreated,
+                                            onTransactionUpdated,
+                                            onCancelEdit,
                                         }: TransactionFormProps) {
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
-    const [type, setType] = useState<"INCOME" | "EXPENSE" | "TRANSFER">(
-        "EXPENSE"
-    );
+    const [type, setType] = useState<"INCOME" | "EXPENSE" | "TRANSFER">("EXPENSE");
     const [transactionDate, setTransactionDate] = useState("");
     const [accountId, setAccountId] = useState("");
     const [categoryId, setCategoryId] = useState("");
 
-    async function handleCreateTransaction(e: React.FormEvent) {
+    useEffect(() => {
+        if (editingTransaction) {
+            setDescription(editingTransaction.description);
+            setAmount(String(editingTransaction.amount));
+            setType(editingTransaction.type);
+            setTransactionDate(editingTransaction.transactionDate);
+            setAccountId(String(editingTransaction.accountId));
+            setCategoryId(String(editingTransaction.categoryId));
+        }
+    }, [editingTransaction]);
+
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        await onTransactionCreated({
+        const request: TransactionRequest = {
             description,
             amount: Number(amount),
             type,
             transactionDate,
             accountId: Number(accountId),
             categoryId: Number(categoryId),
-        });
+        };
+
+        if (editingTransaction) {
+            await onTransactionUpdated(editingTransaction.id, request);
+        } else {
+            await onTransactionCreated(request);
+        }
+
+        setDescription("");
+        setAmount("");
+        setType("EXPENSE");
+        setTransactionDate("");
+        setAccountId("");
+        setCategoryId("");
+    }
+
+    function handleCancel() {
+        onCancelEdit();
 
         setDescription("");
         setAmount("");
@@ -52,11 +85,13 @@ export default function TransactionForm({
 
     return (
         <form
-            onSubmit={handleCreateTransaction}
+            onSubmit={handleSubmit}
             className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6"
         >
             <div className="mb-6">
-                <h2 className="text-xl font-bold text-slate-900">Add Transaction</h2>
+                <h2 className="text-xl font-bold text-slate-900">
+                    {editingTransaction ? "Edit Transaction" : "Add Transaction"}
+                </h2>
                 <p className="text-sm text-slate-500 mt-1">
                     Track income, expenses, and transfers across your accounts.
                 </p>
@@ -124,12 +159,24 @@ export default function TransactionForm({
                 </select>
             </div>
 
-            <button
-                type="submit"
-                className="mt-4 bg-slate-950 text-white px-6 py-3 rounded-xl hover:bg-slate-800 transition"
-            >
-                Create Transaction
-            </button>
+            <div className="flex gap-3 mt-4">
+                <button
+                    type="submit"
+                    className="bg-slate-950 text-white px-6 py-3 rounded-xl hover:bg-slate-800 transition"
+                >
+                    {editingTransaction ? "Update Transaction" : "Create Transaction"}
+                </button>
+
+                {editingTransaction && (
+                    <button
+                        type="button"
+                        onClick={handleCancel}
+                        className="bg-slate-100 text-slate-700 px-6 py-3 rounded-xl hover:bg-slate-200 transition"
+                    >
+                        Cancel
+                    </button>
+                )}
+            </div>
         </form>
     );
 }

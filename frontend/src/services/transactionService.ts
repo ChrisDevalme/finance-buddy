@@ -11,6 +11,22 @@ class TransactionService {
         const response = await api.post<Transaction>("/api/transactions", request);
         return response.data;
     }
+
+    async updateTransaction(
+        transactionId: number,
+        request: TransactionRequest
+    ): Promise<Transaction> {
+        const response = await api.put<Transaction>(
+            `/api/transactions/${transactionId}`,
+            request
+        );
+
+        return response.data;
+    }
+
+    async deleteTransaction(transactionId: number): Promise<void> {
+        await api.delete(`/api/transactions/${transactionId}`);
+    }
 }
 
 export default new TransactionService();

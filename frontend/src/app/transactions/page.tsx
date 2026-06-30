@@ -10,9 +10,13 @@ export default function TransactionsPage() {
         transactions,
         accounts,
         categories,
+        editingTransaction,
+        setEditingTransaction,
         loading,
         error,
         createTransaction,
+        updateTransaction,
+        deleteTransaction,
     } = useTransactions();
 
     if (loading) return <main className="p-8">Loading transactions...</main>;
@@ -23,10 +27,17 @@ export default function TransactionsPage() {
             <TransactionForm
                 accounts={accounts}
                 categories={categories}
+                editingTransaction={editingTransaction}
                 onTransactionCreated={createTransaction}
+                onTransactionUpdated={updateTransaction}
+                onCancelEdit={() => setEditingTransaction(null)}
             />
 
-            <TransactionList transactions={transactions} />
+            <TransactionList
+                transactions={transactions}
+                onEdit={setEditingTransaction}
+                onDelete={deleteTransaction}
+            />
         </AppLayout>
     );
 }
