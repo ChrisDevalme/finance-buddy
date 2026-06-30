@@ -5,22 +5,31 @@ import { useRouter } from "next/navigation";
 import { WalletCards } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
-export default function LoginPage() {
+export default function RegisterPage() {
     const router = useRouter();
-    const { login } = useAuth();
+    const { register } = useAuth();
 
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
     const [error, setError] = useState("");
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
         try {
-            await login({ email, password });
+            await register({
+                firstName,
+                lastName,
+                email,
+                password,
+            });
+
             router.push("/dashboard");
         } catch {
-            setError("Invalid email or password.");
+            setError("Unable to create account. Try another email.");
         }
     }
 
@@ -37,7 +46,7 @@ export default function LoginPage() {
                             Finance Buddy
                         </h1>
                         <p className="text-sm text-slate-500">
-                            Sign in to your account
+                            Create your account
                         </p>
                     </div>
                 </div>
@@ -49,6 +58,20 @@ export default function LoginPage() {
                 )}
 
                 <form onSubmit={handleSubmit} className="grid gap-4">
+                    <input
+                        className="border border-slate-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-slate-900"
+                        placeholder="First name"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+
+                    <input
+                        className="border border-slate-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-slate-900"
+                        placeholder="Last name"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
+
                     <input
                         className="border border-slate-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-slate-900"
                         type="email"
@@ -69,7 +92,7 @@ export default function LoginPage() {
                         type="submit"
                         className="bg-slate-950 text-white p-3 rounded-xl hover:bg-slate-800 transition"
                     >
-                        Login
+                        Create Account
                     </button>
                 </form>
             </section>

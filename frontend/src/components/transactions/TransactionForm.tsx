@@ -53,75 +53,80 @@ export default function TransactionForm({
     return (
         <form
             onSubmit={handleCreateTransaction}
-            className="bg-white p-6 rounded-lg shadow mb-6 grid gap-4"
+            className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6"
         >
-            <h2 className="text-xl font-bold">Add Transaction</h2>
+            <div className="mb-6">
+                <h2 className="text-xl font-bold text-slate-900">Add Transaction</h2>
+                <p className="text-sm text-slate-500 mt-1">
+                    Track income, expenses, and transfers across your accounts.
+                </p>
+            </div>
 
-            <input
-                className="border p-3 rounded"
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input
+                    className="border border-slate-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-slate-900"
+                    placeholder="Description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
 
-            <input
-                className="border p-3 rounded"
-                type="number"
-                placeholder="Amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-            />
+                <input
+                    className="border border-slate-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-slate-900"
+                    type="number"
+                    placeholder="Amount"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                />
 
-            <select
-                className="border p-3 rounded"
-                value={type}
-                onChange={(e) =>
-                    setType(e.target.value as "INCOME" | "EXPENSE" | "TRANSFER")
-                }
-            >
-                <option value="EXPENSE">Expense</option>
-                <option value="INCOME">Income</option>
-                <option value="TRANSFER">Transfer</option>
-            </select>
+                <select
+                    className="border border-slate-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-slate-900"
+                    value={type}
+                    onChange={(e) =>
+                        setType(e.target.value as "INCOME" | "EXPENSE" | "TRANSFER")
+                    }
+                >
+                    <option value="EXPENSE">Expense</option>
+                    <option value="INCOME">Income</option>
+                    <option value="TRANSFER">Transfer</option>
+                </select>
 
-            <input
-                className="border p-3 rounded"
-                type="date"
-                value={transactionDate}
-                onChange={(e) => setTransactionDate(e.target.value)}
-            />
+                <input
+                    className="border border-slate-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-slate-900"
+                    type="date"
+                    value={transactionDate}
+                    onChange={(e) => setTransactionDate(e.target.value)}
+                />
 
-            <select
-                className="border p-3 rounded"
-                value={accountId}
-                onChange={(e) => setAccountId(e.target.value)}
-            >
-                <option value="">Select Account</option>
+                <select
+                    className="border border-slate-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-slate-900"
+                    value={accountId}
+                    onChange={(e) => setAccountId(e.target.value)}
+                >
+                    <option value="">Select account</option>
+                    {accounts.map((account) => (
+                        <option key={account.id} value={account.id}>
+                            {account.name}
+                        </option>
+                    ))}
+                </select>
 
-                {accounts.map((account) => (
-                    <option key={account.id} value={account.id}>
-                        {account.name}
-                    </option>
-                ))}
-            </select>
-
-            <select
-                className="border p-3 rounded"
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-            >
-                <option value="">Select Category</option>
-
-                {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                        {category.name}
-                    </option>
-                ))}
-            </select>
+                <select
+                    className="border border-slate-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-slate-900"
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}
+                >
+                    <option value="">Select category</option>
+                    {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             <button
                 type="submit"
-                className="bg-black text-white p-3 rounded hover:bg-gray-800 transition"
+                className="mt-4 bg-slate-950 text-white px-6 py-3 rounded-xl hover:bg-slate-800 transition"
             >
                 Create Transaction
             </button>
