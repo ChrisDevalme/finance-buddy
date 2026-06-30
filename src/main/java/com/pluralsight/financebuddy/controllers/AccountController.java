@@ -2,6 +2,7 @@ package com.pluralsight.financebuddy.controllers;
 
 import com.pluralsight.financebuddy.dto.AccountRequest;
 import com.pluralsight.financebuddy.dto.AccountResponse;
+import com.pluralsight.financebuddy.dto.ApiResponse;
 import com.pluralsight.financebuddy.models.User;
 import com.pluralsight.financebuddy.services.AccountService;
 import com.pluralsight.financebuddy.services.CurrentUserService;
@@ -32,6 +33,22 @@ public class AccountController {
     public List<AccountResponse> getMyAccounts() {
         Long userId = currentUserService.getCurrentUser().getId();
         return accountService.getAccountsByUserId(userId);
+    }
+
+    @PutMapping("/{accountId}")
+    public AccountResponse updateAccount(
+            @PathVariable Long accountId,
+            @Valid @RequestBody AccountRequest request) {
+
+        User user = currentUserService.getCurrentUser();
+
+        return accountService.updateAccount(accountId, request, user);
+    }
+
+    @DeleteMapping("/{accountId}")
+    public ApiResponse deleteAccount(@PathVariable Long accountId) {
+        User user = currentUserService.getCurrentUser();
+        return accountService.deleteAccount(accountId, user);
     }
 
 //    @GetMapping("/user/{userId}")

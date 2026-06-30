@@ -22,4 +22,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             Long userId,
             String keyword
     );
+
+    boolean existsByAccountId(Long accountId);
 }

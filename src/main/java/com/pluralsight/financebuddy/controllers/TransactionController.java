@@ -4,7 +4,10 @@ import com.pluralsight.financebuddy.dto.ApiResponse;
 import com.pluralsight.financebuddy.dto.TransactionRequest;
 import com.pluralsight.financebuddy.dto.TransactionResponse;
 import com.pluralsight.financebuddy.enums.TransactionType;
+import com.pluralsight.financebuddy.models.Account;
 import com.pluralsight.financebuddy.models.User;
+import com.pluralsight.financebuddy.repositories.AccountRepository;
+import com.pluralsight.financebuddy.repositories.TransactionRepository;
 import com.pluralsight.financebuddy.services.CurrentUserService;
 import com.pluralsight.financebuddy.services.TransactionService;
 import jakarta.validation.Valid;
@@ -18,10 +21,14 @@ public class TransactionController {
 
     private final TransactionService transactionService;
     private final CurrentUserService currentUserService;
+    private final TransactionRepository transactionRepository;
+    private final AccountRepository accountRepository;
 
-    public TransactionController(TransactionService transactionService, CurrentUserService currentUserService) {
+    public TransactionController(TransactionService transactionService, CurrentUserService currentUserService, TransactionRepository transactionRepository, AccountRepository accountRepository) {
         this.transactionService = transactionService;
         this.currentUserService = currentUserService;
+        this.transactionRepository = transactionRepository;
+        this.accountRepository = accountRepository;
     }
 
     @PostMapping
